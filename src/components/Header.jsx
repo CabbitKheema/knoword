@@ -11,7 +11,8 @@ export default function Header() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 py-3 backdrop-blur-lg border-b border-neutral-700/80">
+    /*backdrop-blur-lg*/
+    <nav className="w-full z-50 py-3 border-b border-neutral-700/80">
       <div className="container px-8 mx-auto  lg:text-sm">
         <div className="flex justify-between items-center">
           <div className="flex items-center flex-shrink-0">
@@ -43,7 +44,7 @@ export default function Header() {
           </div>
         </div>
         {mobileDrawerOpen && (
-          <div className="fixed left-0 z-20 bg-neutral-900 w-full p-12 flex flex-col items-center lg:hidden">
+          <div className="fixed left-0 z-20 bg-neutral-900 w-full p-12 flex flex-col items-center lg:hidden border-b border-neutral-700">
             <ul>
               {navItems.map((item, index) => (
                 <li key={index} className="py-4">

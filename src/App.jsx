@@ -9,14 +9,16 @@ import Footer from "./components/Footer";
 export default function App() {
   return (
     <BrowserRouter>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/sign-up" element={<SignUp />} />
-        <Route path="/sign-in" element={<SignIn />} />
-      </Routes>
-      <Footer />
+      <div className="flex flex-col h-screen overflow-hidden">
+        <Header />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/sign-in" element={<SignIn />} />
+        </Routes>
+        <Footer />
+      </div>
     </BrowserRouter>
   );
 }
