@@ -1,11 +1,38 @@
 import { useEffect, useRef } from "react";
 import { BiMicrophone } from "react-icons/bi";
 import { RiSpeakFill } from "react-icons/ri";
+import { FaArrowRight } from "react-icons/fa";
 import { useState } from "react";
+import { FindWordMeaning } from "../apis/FindWordMeaning";
 
 export default function Home() {
   const [buttonClickedState, setButtonClickedState] = useState(false);
+  const [activelyTyping, setActivelyTyping] = useState(false);
+  const [resultText, setResultText] = useState("");
+  const [inputText, setInputText] = useState("");
+
   const scrollContainerRef = useRef(null);
+
+  async function textSubmitted() {
+    console.log("Text submitted.");
+    setResultText("");
+    try {
+      const result = await FindWordMeaning(inputText); // Await the asynchronous function
+      setResultText(result); // Update the state with the resolved result
+    } catch (error) {
+      console.error("Error fetching word meaning:", error);
+      setResultText(
+        "Error fetching the meaning of the word. Please try again."
+      );
+    }
+  }
+
+  const handleInputChange = (event) => {
+    // Check if there is any content in the input field
+    const flag = event.target.value.trim().length > 0;
+    setActivelyTyping(flag);
+    if (flag === true) setInputText(event.target.value);
+  };
 
   function changeButtonState() {
     setButtonClickedState(!buttonClickedState);
@@ -26,12 +53,16 @@ export default function Home() {
     >
       <div className="max-w-xs md:max-w-md lg:max-w-4xl mx-auto border border-t-0 border-neutral-700">
         {/* Placeholder for scrolling content */}
-        <div className="text-neutral-300 px-8 pt-4  text-xs md:text-sm lg:text-lg">
-          {Array.from({ length: 10 }).map((_, i) => (
+        <div
+          className="text-neutral-300 px-8 py-6  text-xs md:text-sm lg:text-lg"
+          style={{ whiteSpace: "pre-line" }}
+        >
+          {Array.from({ length: 0 }).map((_, i) => (
             <p key={i} className="mb-4">
               Placeholder content for scrolling (item {i + 1})
             </p>
           ))}
+          {resultText}
         </div>
         <div className="sticky bottom-0 w-full backdrop-blur-lg rounded-t-lg border-t border-neutral-700">
           <div className=" px-9 pt-8 pb-2"></div>
@@ -47,18 +78,32 @@ export default function Home() {
             <input
               type="text"
               id="word"
-              className="w-full text-sm rounded-l-lg text-neutral-300 border border-neutral-700/80 bg-neutral-800 focus:outline-none"
+              // value={inputText}
+              className="w-full p-2 text-sm rounded-l-lg text-neutral-300 border border-neutral-700/80 bg-neutral-800 focus:outline-none"
               placeholder="e.g. providence"
+              onChange={handleInputChange} // Trigger state change while typing
             />
-            <button
-              type="button"
-              className={`px-4  py-2.5 rounded-r-lg bg-neutral-800 border border-neutral-700/80 outline-neutral-700 ${
-                buttonClickedState ? "outline" : ""
-              }`}
-              onClick={changeButtonState}
-            >
-              {buttonClickedState ? <RiSpeakFill /> : <BiMicrophone />}
-            </button>
+
+            {activelyTyping && (
+              <button
+                type="button"
+                className="px-4  py-2.5 rounded-r-lg bg-neutral-800 border border-neutral-700/80 outline-neutral-700"
+                onClick={textSubmitted}
+              >
+                <FaArrowRight />
+              </button>
+            )}
+            {!activelyTyping && (
+              <button
+                type="button"
+                className={`px-4  py-2.5 rounded-r-lg bg-neutral-800 border border-neutral-700/80 outline-neutral-700 ${
+                  buttonClickedState ? "outline" : ""
+                }`}
+                onClick={changeButtonState}
+              >
+                {buttonClickedState ? <RiSpeakFill /> : <BiMicrophone />}
+              </button>
+            )}
           </div>
         </div>
       </div>
