@@ -7,9 +7,14 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: "autoUpdate",
+      // registerType: "prompt", // Ensures the app auto-checks for updates
+      // devOptions: {
+      //   enabled: true, // Enables PWA during development
+      // },
       workbox: {
+        // cleanupOutdatedCaches: true, // Cleans old caches
         globPatterns: ["**/*"],
+        sourcemap: true,
       },
       includeAssets: ["**/*"],
       manifest: {
