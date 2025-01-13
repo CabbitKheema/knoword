@@ -8,6 +8,11 @@ import { FaKeyboard } from "react-icons/fa";
 import { FaCamera } from "react-icons/fa";
 import { SlOptions } from "react-icons/sl";
 import { BiX } from "react-icons/bi";
+import { FiMic, FiUpload } from "react-icons/fi"; // Icons for buttons
+import { FiPlay, FiPause } from "react-icons/fi";
+import { FaStop } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
+import { VoiceNoteToText } from "../apis/VoiceNoteToText";
 
 export default function Home() {
   // const [buttonClickedState, setButtonClickedState] = useState(false);
@@ -23,6 +28,63 @@ export default function Home() {
 
   const scrollContainerRef = useRef(null);
 
+  {
+    /*Mic recording section*/
+  }
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordedAudio, setRecordedAudio] = useState(null);
+  const mediaRecorderRef = useRef(null);
+  const audioChunksRef = useRef([]);
+  const audioRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorderRef.current = new MediaRecorder(stream);
+
+      mediaRecorderRef.current.ondataavailable = (event) => {
+        audioChunksRef.current.push(event.data);
+      };
+
+      mediaRecorderRef.current.onstop = () => {
+        const audioBlob = new Blob(audioChunksRef.current, {
+          type: "audio/m4a",
+        });
+        const audioUrl = URL.createObjectURL(audioBlob);
+        setRecordedAudio({ url: audioUrl, blob: audioBlob });
+        audioChunksRef.current = [];
+      };
+
+      mediaRecorderRef.current.start();
+      setIsRecording(true);
+    } catch (error) {
+      console.error("Error accessing microphone:", error);
+    }
+  };
+
+  const stopRecording = () => {
+    mediaRecorderRef.current.stop();
+    setIsRecording(false);
+  };
+
+  const cancelRecordedAudio = () => {
+    setRecordedAudio(null);
+  };
+
+  const togglePlay = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+  {
+    /*End Mic recroding section*/
+  }
   function onInputOptionActive() {
     setInputOptionActiveState(true);
     setKeyboardActiveState(false);
@@ -42,13 +104,33 @@ export default function Home() {
     setCameraActiveState(true);
   }
 
+  async function setResult(text) {
+    const result = await FindWordMeaning(text); // Await the asynchronous function
+    setInputText("");
+    setActivelyTyping(false);
+    setResultText(result); // Update the state with the resolved result
+  }
+
   async function textSubmitted() {
     console.log("Text submitted.");
     try {
-      const result = await FindWordMeaning(inputText); // Await the asynchronous function
-      setInputText("");
-      setActivelyTyping(false);
-      setResultText(result); // Update the state with the resolved result
+      await setResult(inputText);
+    } catch (error) {
+      console.error("Error fetching word meaning:", error);
+      setResultText(
+        "Error fetching the meaning of the word. Please try again."
+      );
+    }
+  }
+
+  async function audioSubmitted() {
+    console.log("audio submitted.");
+    try {
+      const word = await VoiceNoteToText(recordedAudio.blob); // Await the asynchronous function
+      // setInputText("");
+      // setActivelyTyping(false);
+      await setResult(word);
+      cancelRecordedAudio();
     } catch (error) {
       console.error("Error fetching word meaning:", error);
       setResultText(
@@ -192,6 +274,101 @@ export default function Home() {
                   type="button"
                   onClick={onInputOptionActive}
                   className="px-4  py-2.5 rounded-r-lg bg-neutral-800 hover:bg-neutral-900 border border-l-0 border-neutral-700/80 outline-neutral-700"
+                >
+                  <SlOptions />
+                </button>
+              )}
+            </div>
+          )}
+
+          {micActiveState && (
+            <div className="relative group flex justify-center px-8 pb-8 pt-10">
+              {/*Audio recording/stop button*/}
+              <button
+                type="button"
+                onClick={() =>
+                  isRecording ? stopRecording() : startRecording()
+                }
+                className={`px-4  py-2.5 rounded-l-lg border ${
+                  isPlaying
+                    ? "bg-neutral-900"
+                    : "bg-neutral-800 hover:bg-neutral-900"
+                } border-neutral-700/80 outline-neutral-700 `}
+                disabled={isPlaying}
+              >
+                {isRecording ? <FaStop /> : <FiMic />}
+              </button>
+
+              {/*Recorded audio play/pause button*/}
+              {recordedAudio !== null && (
+                <button
+                  type="button"
+                  onClick={togglePlay}
+                  className={`px-4  py-2.5  ${
+                    isRecording
+                      ? "bg-neutral-900"
+                      : "bg-neutral-800 hover:bg-neutral-900"
+                  }  border-y border-neutral-700/80 outline-neutral-700`}
+                  disabled={isRecording}
+                >
+                  {isPlaying ? <FiPause /> : <FiPlay />}
+                  {/* Hidden audio reference  */}
+                  <audio
+                    className="hidden"
+                    ref={audioRef}
+                    src={recordedAudio.url}
+                    onEnded={() => {
+                      setIsPlaying(false);
+                    }}
+                  />
+                </button>
+              )}
+
+              {/*Recorded audio deletion button*/}
+              {recordedAudio !== null && (
+                <button
+                  type="button"
+                  onClick={cancelRecordedAudio}
+                  className={`absolute bottom-0.5 p-1.5 rounded-full  ${
+                    isRecording || isPlaying
+                      ? "bg-neutral-900"
+                      : "bg-neutral-800 hover:bg-neutral-900"
+                  } border border-neutral-700/80 outline-neutral-700`}
+                  disabled={isPlaying || isRecording}
+                >
+                  <FaTrash className="size-3" />
+                  {/* This is the vertical line connecting delete and play button */}
+                  <div className="absolute left-2.5 bottom-4 -z-10">|</div>
+                </button>
+              )}
+
+              {/*Recorded audio upload button*/}
+              {recordedAudio !== null && (
+                <button
+                  type="button"
+                  onClick={audioSubmitted}
+                  className={`px-4  py-2.5 rounded-r-lg ${
+                    isRecording || isPlaying
+                      ? "bg-neutral-900"
+                      : "bg-neutral-800 hover:bg-neutral-900"
+                  } border  border-neutral-700/80 outline-neutral-700`}
+                  disabled={isPlaying || isRecording}
+                >
+                  <FiUpload />
+                </button>
+              )}
+
+              {/*Open all options button*/}
+              {recordedAudio === null && (
+                <button
+                  type="button"
+                  onClick={onInputOptionActive}
+                  className={`px-4  py-2.5 rounded-r-lg ${
+                    isRecording
+                      ? "bg-neutral-900"
+                      : "bg-neutral-800 hover:bg-neutral-900"
+                  } border  border-neutral-700/80 outline-neutral-700`}
+                  disabled={isRecording}
                 >
                   <SlOptions />
                 </button>
