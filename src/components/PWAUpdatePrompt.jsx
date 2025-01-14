@@ -1,10 +1,16 @@
 import { useState } from "react";
 import { registerSW } from "virtual:pwa-register";
+import {
+  borderColor,
+  hoverOrDisabledInteractableBG,
+  idleActiveText,
+  idleInteractableBG,
+  idleTextSize,
+  roundedInteractableEdgeStyle,
+} from "../constants/index";
 
 export default function PWAUpdatePrompt() {
   const [isUpdatePresent, setIsUpdatePresent] = useState(false);
-  const buttonClass =
-    "text-sm pt-1 px-3 bg-neutral-800 border border-neutral-700/80 rounded-lg hover:bg-neutral-900 transition";
 
   // Use a flag to prevent multiple invocations
   const updateSW = registerSW({
@@ -36,7 +42,9 @@ export default function PWAUpdatePrompt() {
   return (
     <section className="absolute top-20 right-8">
       {isUpdatePresent && (
-        <div className="grid p-3 border border-neutral-700/80 bg-neutral-900 rounded-lg">
+        <div
+          className={`grid p-3 ${borderColor} ${hoverOrDisabledInteractableBG} ${roundedInteractableEdgeStyle}`}
+        >
           <h2 className="text-md text-center font-semibold">
             New update!
             <br />
@@ -44,7 +52,7 @@ export default function PWAUpdatePrompt() {
           </h2>
           <div className="pt-3 flex justify-center gap-2">
             <button
-              className={buttonClass}
+              className={`py-1 px-3 ${idleTextSize} ${idleActiveText}  ${borderColor} ${roundedInteractableEdgeStyle} ${idleInteractableBG}`}
               onClick={handleRefresh}
               aria-label="Refresh the service worker"
             >

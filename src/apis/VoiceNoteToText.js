@@ -12,7 +12,7 @@ export async function VoiceNoteToText(audioBlob) {
   // Use the File object directly with the Groq SDK
   const transcription = await groq.audio.transcriptions.create({
     file: audioFile, // Use the File object
-    model: "whisper-large-v3-turbo",
+    model: import.meta.env.VITE_GROQ_AUDIO_MODEL,
   });
 
   const output = transcription.text;
