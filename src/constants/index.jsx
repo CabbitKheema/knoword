@@ -37,8 +37,8 @@ export const interactablePadding = " px-4 py-2.5 ";
 export const hoverOrDisabledInteractableBG = " bg-neutral-900 ";
 export const idleInteractableBG = " bg-neutral-800 hover:bg-neutral-900 ";
 export const leftInteractableEdgeStyle = " rounded-l-lg border ";
-export const middleInteractableEdgeStyle = " border-y ";
-export const rightInteractableEdgeStyle = " rounded-r-lg border ";
+export const middleInteractableEdgeStyle = " border border-l-0 ";
+export const rightInteractableEdgeStyle = " rounded-r-lg border border-l-0 ";
 export const circularInteractableEdgeStyle = " rounded-full border ";
 export const roundedInteractableEdgeStyle = " rounded-lg border ";
 

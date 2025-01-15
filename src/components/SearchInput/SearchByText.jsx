@@ -20,6 +20,7 @@ import {
   idleDisabledText,
   idleTextSize,
 } from "../../constants";
+import { useToast } from "../Toast/ToastService";
 
 export default function SearchByText() {
   const currentWebsiteAction = useSelector(
@@ -30,25 +31,25 @@ export default function SearchByText() {
   const isTyping = inputText.trim().length;
 
   const dispatch = useDispatch();
+  const toast = useToast();
 
-  async function textSubmitted() {
-    console.log("Text submitted.");
-    try {
-      dispatch(setWebsiteAction(websiteAction.SEARCHING));
-      const result = await FindWordMeaning(inputText); // Await the asynchronous function
-      setInputText("");
-      dispatch(setTextResult(result)); // Update the state with the resolved result
-    } catch (error) {
-      console.error("Error fetching word meaning:", error);
-      dispatch(
-        setTextResult(
-          "Error fetching the meaning of the word. Please try again."
-        )
-      );
-    } finally {
-      dispatch(setWebsiteAction(websiteAction.IDLE));
-    }
-  }
+  const findInputTextMeaning = () => {
+    console.log("Searching word...");
+    dispatch(setWebsiteAction(websiteAction.SEARCHING));
+    FindWordMeaning(inputText)
+      .then((response) => {
+        toast.notificationToast(response);
+        dispatch(setTextResult(response.data)); // Update the state with the resolved result
+        setInputText("");
+      })
+      .catch((response) => {
+        console.error("Error fetching word meaning:", response.error);
+        toast.notificationToast(response);
+      })
+      .finally(() => {
+        dispatch(setWebsiteAction(websiteAction.IDLE));
+      });
+  };
 
   return (
     <div className={searchOptionStyle}>
@@ -89,7 +90,7 @@ export default function SearchByText() {
         placeholder="e.g. providence"
         onKeyDown={(event) => {
           if (event.key === "Enter" && isTyping) {
-            textSubmitted();
+            findInputTextMeaning();
           }
         }}
         disabled={isSearching}
@@ -100,7 +101,7 @@ export default function SearchByText() {
           className={`${
             isSearching ? hoverOrDisabledInteractableBG : idleInteractableBG
           } ${interactablePadding} ${borderColor} ${rightInteractableEdgeStyle} border-l-0`}
-          onClick={textSubmitted}
+          onClick={findInputTextMeaning}
           disabled={isSearching}
         >
           <FiSearch />

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { setTextResult } from "../../features/searchword/textResultSlice";
 import { FindWordMeaning } from "../../apis/FindWordMeaning";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,7 +14,10 @@ import {
   circularInteractableEdgeStyle,
   fadingAbsoluteLabelSpan,
   hoverOrDisabledInteractableBG,
+  idleActiveText,
+  idleDisabledText,
   idleInteractableBG,
+  idleTextSize,
   interactablePadding,
   labelSpanIconStyle,
   leftInteractableEdgeStyle,
@@ -23,13 +26,17 @@ import {
   searchOptionStyle,
 } from "../../constants";
 
+import { useToast } from "../Toast/ToastService";
+
 export default function SearchByVoice() {
   const currentWebsiteAction = useSelector(
     (state) => state.websiteActionReducer.websiteAction
   );
   const isRecording = currentWebsiteAction == websiteAction.RECORDING;
   const isSearching = currentWebsiteAction == websiteAction.SEARCHING;
+  const isTranscribing = currentWebsiteAction == websiteAction.TRANSCRIBING;
 
+  const [inputText, setInputText] = useState("");
   const [recordedAudio, setRecordedAudio] = useState(null);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
@@ -37,12 +44,7 @@ export default function SearchByVoice() {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const dispatch = useDispatch();
-
-  async function setResult(text) {
-    const result = await FindWordMeaning(text); // Await the asynchronous function
-
-    dispatch(setTextResult(result)); // Update the state with the resolved result
-  }
+  const toast = useToast();
 
   const startRecording = async () => {
     try {
@@ -73,12 +75,13 @@ export default function SearchByVoice() {
     }
   };
 
-  const stopRecording = () => {
-    mediaRecorderRef.current.stop();
+  const stopRecording = async () => {
+    await mediaRecorderRef.current.stop();
     dispatch(setWebsiteAction(websiteAction.IDLE));
   };
 
   const cancelRecordedAudio = () => {
+    setInputText("");
     setRecordedAudio(null);
   };
 
@@ -93,24 +96,51 @@ export default function SearchByVoice() {
     }
   };
 
-  async function audioSubmitted() {
-    console.log("audio submitted.");
-    try {
-      dispatch(setWebsiteAction(websiteAction.SEARCHING));
-      const word = await VoiceNoteToText(recordedAudio.blob); // Await the asynchronous function
-      await setResult(word);
-      cancelRecordedAudio();
-    } catch (error) {
-      console.error("Error fetching word meaning:", error);
-      dispatch(
-        setTextResult(
-          "Error fetching the meaning of the word. Please try again."
-        )
-      );
-    } finally {
-      dispatch(setWebsiteAction(websiteAction.IDLE));
+  // Define the async function
+  const convertVoiceToText = () => {
+    console.log("Converting voice to text...");
+    dispatch(setWebsiteAction(websiteAction.TRANSCRIBING));
+
+    VoiceNoteToText(recordedAudio.blob)
+      .then((response) => {
+        setInputText(response.data);
+        toast.notificationToast(response);
+      })
+      .catch((response) => {
+        console.error("Error recognizing voice:", response.error);
+        toast.notificationToast(response);
+        cancelRecordedAudio();
+      })
+      .finally(() => {
+        dispatch(setWebsiteAction(websiteAction.IDLE));
+      });
+  };
+
+  // Call the function when audio has been recorded
+  useEffect(() => {
+    if (recordedAudio && recordedAudio.blob) {
+      convertVoiceToText();
     }
-  }
+  }, [recordedAudio]);
+
+  const findInputTextMeaning = () => {
+    console.log("Searching word...");
+    dispatch(setWebsiteAction(websiteAction.SEARCHING));
+    FindWordMeaning(inputText)
+      .then((response) => {
+        toast.notificationToast(response);
+        dispatch(setTextResult(response.data)); // Update the state with the resolved result
+        cancelRecordedAudio();
+      })
+      .catch((response) => {
+        console.error("Error fetching word meaning:", response.error);
+        toast.notificationToast(response);
+      })
+      .finally(() => {
+        dispatch(setWebsiteAction(websiteAction.IDLE));
+      });
+  };
+
   {
     /*End Mic recroding section*/
   }
@@ -135,7 +165,11 @@ export default function SearchByVoice() {
         </span>
         <span
           className={`${fadingAbsoluteLabelSpan}  ${
-            isPlaying || recordedAudio === null || isRecording || isSearching
+            isPlaying ||
+            recordedAudio === null ||
+            isRecording ||
+            isSearching ||
+            isTranscribing
               ? "opacity-0"
               : "opacity-100"
           }`}
@@ -157,84 +191,101 @@ export default function SearchByVoice() {
         >
           Searching...
         </span>
+        <span
+          className={`${fadingAbsoluteLabelSpan} ${
+            isTranscribing ? "opacity-100" : "opacity-0"
+          } `}
+        >
+          Transcribing audio...
+        </span>
       </label>
+
       {/*Audio recording/stop button*/}
       <button
         type="button"
         onClick={() => (isRecording ? stopRecording() : startRecording())}
         className={`${interactablePadding} ${leftInteractableEdgeStyle} ${
-          isPlaying || isSearching
+          isPlaying || isSearching || isTranscribing
             ? hoverOrDisabledInteractableBG
             : idleInteractableBG
         } ${borderColor} `}
-        disabled={isPlaying || isSearching}
+        disabled={isPlaying || isSearching || isTranscribing}
       >
         {isRecording ? <IoStopOutline /> : <FiMic />}
       </button>
 
-      {/*Recorded audio play/pause button*/}
-      {recordedAudio !== null && (
-        <button
-          type="button"
-          onClick={togglePlay}
-          className={`${interactablePadding}  ${
-            isRecording || isSearching
-              ? hoverOrDisabledInteractableBG
-              : idleInteractableBG
-          }  ${middleInteractableEdgeStyle} ${borderColor}`}
-          disabled={isRecording || isSearching}
-        >
-          {isPlaying ? <FiPause /> : <FiPlay />}
-          {/* Hidden audio reference  */}
-          <audio
-            className="hidden"
-            ref={audioRef}
-            src={recordedAudio.url}
-            onEnded={() => {
-              setIsPlaying(false);
-            }}
+      {recordedAudio === null ? (
+        /*Open all options button*/
+        <BackToOptions />
+      ) : (
+        <>
+          {/*Recorded audio play/pause button*/}
+          <button
+            type="button"
+            onClick={togglePlay}
+            className={`${interactablePadding}  ${
+              isRecording || isSearching || isTranscribing
+                ? hoverOrDisabledInteractableBG
+                : idleInteractableBG
+            }  ${middleInteractableEdgeStyle} ${borderColor}`}
+            disabled={isRecording || isSearching || isTranscribing}
+          >
+            {isPlaying ? <FiPause /> : <FiPlay />}
+            {/* Hidden audio reference  */}
+            <audio
+              className="hidden"
+              ref={audioRef}
+              src={recordedAudio.url}
+              onEnded={() => {
+                setIsPlaying(false);
+              }}
+            />
+          </button>
+          {/*Transcription*/}
+          <input
+            type="text"
+            id="word"
+            value={inputText}
+            className={`p-2 ${middleInteractableEdgeStyle} ${idleTextSize} ${
+              isRecording || isSearching || isTranscribing
+                ? idleDisabledText
+                : idleActiveText
+            }   ${borderColor} w-full focus:outline-none`}
+            placeholder="..."
+            disabled={true}
           />
-        </button>
+          {/*Recorded audio deletion button*/}
+          <button
+            type="button"
+            onClick={cancelRecordedAudio}
+            className={`absolute bottom-0.5 p-1.5 ${circularInteractableEdgeStyle} ${
+              isRecording || isPlaying || isSearching || isTranscribing
+                ? hoverOrDisabledInteractableBG
+                : idleInteractableBG
+            }  ${borderColor}`}
+            disabled={isPlaying || isRecording || isSearching || isTranscribing}
+          >
+            <FiTrash className="size-3" />
+            {/* This is the vertical line connecting delete and play button */}
+            <div className="absolute left-2.5 bottom-4 -z-10 text-neutral-600">
+              |
+            </div>
+          </button>
+          {/*Recorded audio search button*/}
+          <button
+            type="button"
+            onClick={findInputTextMeaning}
+            className={`${interactablePadding} ${rightInteractableEdgeStyle} ${
+              isRecording || isPlaying || isSearching || isTranscribing
+                ? hoverOrDisabledInteractableBG
+                : idleInteractableBG
+            }   ${borderColor}`}
+            disabled={isPlaying || isRecording || isSearching || isTranscribing}
+          >
+            <FiSearch />
+          </button>
+        </>
       )}
-
-      {/*Recorded audio deletion button*/}
-      {recordedAudio !== null && (
-        <button
-          type="button"
-          onClick={cancelRecordedAudio}
-          className={`absolute bottom-0.5 p-1.5 ${circularInteractableEdgeStyle} ${
-            isRecording || isPlaying || isSearching
-              ? hoverOrDisabledInteractableBG
-              : idleInteractableBG
-          }  ${borderColor}`}
-          disabled={isPlaying || isRecording || isSearching}
-        >
-          <FiTrash className="size-3" />
-          {/* This is the vertical line connecting delete and play button */}
-          <div className="absolute left-2.5 bottom-4 -z-10 text-neutral-600">
-            |
-          </div>
-        </button>
-      )}
-
-      {/*Recorded audio search button*/}
-      {recordedAudio !== null && (
-        <button
-          type="button"
-          onClick={audioSubmitted}
-          className={`${interactablePadding} ${rightInteractableEdgeStyle} ${
-            isRecording || isPlaying || isSearching
-              ? hoverOrDisabledInteractableBG
-              : idleInteractableBG
-          }   ${borderColor}`}
-          disabled={isPlaying || isRecording || isSearching}
-        >
-          <FiSearch />
-        </button>
-      )}
-
-      {/*Open all options button*/}
-      {recordedAudio === null && <BackToOptions />}
     </div>
   );
 }
