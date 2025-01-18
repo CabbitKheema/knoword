@@ -132,10 +132,17 @@ export default function SearchByVoice() {
 
     // console.log("Request file:", file);
     // console.log("File size:", file.size);
+
     try {
+      // Convert Blob to a File object (compatible with FormData)
+      const audioFile = new File([recordedAudio.blob], "audio.m4a", {
+        type: "audio/m4a",
+      });
+
       const formData = new FormData();
+
       // Append the audio blob with a filename and correct MIME type if necessary
-      formData.append("audio", recordedAudio.blob, "audio.m4a");
+      formData.append("audioFile", audioFile);
 
       const res = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/transcribe-word`,
