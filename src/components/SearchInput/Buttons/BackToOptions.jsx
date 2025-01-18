@@ -1,5 +1,6 @@
-import { useDispatch, useSelector } from "react-redux";
-import { inputType, websiteAction } from "../../../enums/enums";
+import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
+import { inputType } from "../../../enums/enums";
 import { setInputType } from "../../../features/selectInputType/inputSelectionSlice";
 import { SlOptions } from "react-icons/sl";
 import {
@@ -10,12 +11,8 @@ import {
   rightInteractableEdgeStyle,
 } from "../../../constants";
 
-export default function BackToOptions() {
+export default function BackToOptions({ isRecording }) {
   const dispatch = useDispatch();
-  const currentWebsiteAction = useSelector(
-    (state) => state.websiteActionReducer.websiteAction
-  );
-  const isRecording = currentWebsiteAction == websiteAction.RECORDING;
   return (
     <button
       type="button"
@@ -31,3 +28,8 @@ export default function BackToOptions() {
     </button>
   );
 }
+
+// Prop validation
+BackToOptions.propTypes = {
+  isRecording: PropTypes.bool.isRequired, // Validate isRecording as a required boolean
+};

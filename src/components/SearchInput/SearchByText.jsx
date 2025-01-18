@@ -30,6 +30,7 @@ export default function SearchByText() {
     reset,
     formState: { errors, isSubmitting },
   } = useForm();
+
   const inputText = watch("inputText", "");
   const isTyping = inputText.trim().length > 0;
 
