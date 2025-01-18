@@ -11,7 +11,7 @@ import {
   rightInteractableEdgeStyle,
 } from "../../../constants";
 
-export default function BackToOptions({ isRecording }) {
+export default function BackToOptions({ isRecording = false }) {
   const dispatch = useDispatch();
   return (
     <button
@@ -31,5 +31,5 @@ export default function BackToOptions({ isRecording }) {
 
 // Prop validation
 BackToOptions.propTypes = {
-  isRecording: PropTypes.bool.isRequired, // Validate isRecording as a required boolean
+  isRecording: PropTypes.bool, // Validate isRecording as a boolean
 };
