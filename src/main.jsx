@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
-import PWAUpdatePrompt from "./components/pwaUpdatePrompt";
+import PWAUpdatePrompt from "./components/PWAUpdatePrompt.jsx";
 import { Provider } from "react-redux";
 import { store } from "./app/store";
 import ToastProvider from "./components/Toast/ToastProvider";
