@@ -33,6 +33,7 @@ export const communityLinks = [
   /*css*/
 }
 export const borderColor = " border-neutral-700/80 ";
+export const dangerBorderColor = " border-red-500 ";
 export const interactablePadding = " px-4 py-2.5 ";
 export const hoverOrDisabledInteractableBG = " bg-neutral-900 ";
 export const idleInteractableBG = " bg-neutral-800 hover:bg-neutral-900 ";

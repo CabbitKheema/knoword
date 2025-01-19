@@ -3,6 +3,7 @@ import { setTextResult } from "../../features/searchword/textResultSlice";
 import { useDispatch, useSelector } from "react-redux";
 // import { VoiceNoteToText } from "../../apis/VoiceNoteToText";
 import { FiMic, FiPause, FiPlay, FiSearch, FiTrash } from "react-icons/fi";
+import { TfiMinus } from "react-icons/tfi";
 import { IoStopOutline } from "react-icons/io5";
 import BackToOptions from "./Buttons/BackToOptions";
 import { websiteAction } from "../../enums/enums";
@@ -11,6 +12,7 @@ import {
   borderColor,
   centerFadingAbsoluteLabel,
   circularInteractableEdgeStyle,
+  dangerBorderColor,
   fadingAbsoluteLabelSpan,
   hoverOrDisabledInteractableBG,
   idleActiveText,
@@ -22,6 +24,7 @@ import {
   leftInteractableEdgeStyle,
   middleInteractableEdgeStyle,
   rightInteractableEdgeStyle,
+  roundedInteractableEdgeStyle,
   searchOptionStyle,
 } from "../../constants";
 
@@ -57,15 +60,56 @@ export default function SearchByVoice() {
     stopRecording,
     recordingBlob,
     isRecording,
-    // recordingTime,
+    recordingTime,
   } = useAudioRecorder();
+
+  const maxAudioDuration = parseFloat(
+    import.meta.env.VITE_MAX_AUDIO_DURATION_IN_SECONDS
+  );
+  const remainingRecordingTime = maxAudioDuration - recordingTime;
+
+  useEffect(() => {
+    if (recordingTime >= maxAudioDuration) {
+      stopRecording();
+      toast.notificationToast({
+        message: [
+          "Limit reached!",
+          `Audio duration should not exceed the allowed limit of ${maxAudioDuration} seconds`,
+        ],
+      });
+    }
+  }, [recordingTime]);
 
   useEffect(() => {
     if (!recordingBlob) return;
 
     // recordingBlob will be present at this point after 'stopRecording' has been called
     const audioUrl = URL.createObjectURL(recordingBlob);
-    setRecordedAudio({ url: audioUrl, blob: recordingBlob });
+
+    try {
+      const audioContext = new (window.AudioContext ||
+        window.webkitAudioContext)();
+
+      recordingBlob
+        .arrayBuffer()
+        .then((arrayBuffer) => {
+          return audioContext.decodeAudioData(arrayBuffer);
+        })
+        .then((audioBuffer) => {
+          setRecordedAudio({
+            url: audioUrl,
+            blob: recordingBlob,
+            recordingTime: audioBuffer.duration,
+          });
+        });
+    } catch (error) {
+      toast.notificationToast({
+        message: [
+          "Error!",
+          error.message || "Failed to determine audio duration",
+        ],
+      });
+    }
   }, [recordingBlob]);
   // const startRecording = async () => {
   //   try {
@@ -143,6 +187,7 @@ export default function SearchByVoice() {
 
       // Append the audio blob with a filename and correct MIME type if necessary
       formData.append("audioFile", audioFile);
+      formData.append("audioDuration", recordedAudio.recordingTime);
 
       const res = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/transcribe-word`,
@@ -282,6 +327,7 @@ export default function SearchByVoice() {
       </label>
 
       {/*Audio recording/stop button*/}
+
       <button
         type="button"
         onClick={() =>
@@ -294,7 +340,37 @@ export default function SearchByVoice() {
         } ${borderColor} `}
         disabled={isPlaying || isSubmitting || isTranscribing}
       >
-        {isRecording ? <IoStopOutline /> : <FiMic />}
+        {isRecording ? (
+          <>
+            {/* This is the current audio recording remaining duration */}
+            <TfiMinus
+              className="absolute bottom-5 -z-10 text-neutral-700"
+              style={{ transform: "rotate(90deg)" }}
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent event from reaching the parent
+              }}
+            />
+            <span className="absolute bottom-1 -z-10 ">
+              <span
+                type="text"
+                className={`relative -left-5 py-0.5 px-4 text-xs ${idleDisabledText} ${roundedInteractableEdgeStyle} ${idleInteractableBG} ${
+                  remainingRecordingTime > 3 ? borderColor : dangerBorderColor
+                } `}
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent event from reaching the parent
+                }}
+              >
+                {remainingRecordingTime}
+              </span>
+            </span>
+            {/*end*/}
+            <IoStopOutline />
+          </>
+        ) : (
+          <>
+            <FiMic />
+          </>
+        )}
       </button>
 
       {recordedAudio === null ? (
@@ -348,7 +424,9 @@ export default function SearchByVoice() {
           />
           {errors.inputText && (
             <div className="absolute bottom-16 flex-1 justify-center items-center">
-              <p className="max-w-52 text-xs text-center bg-neutral-900 border border-red-500 rounded-lg p-2">
+              <p
+                className={`max-w-52 text-xs text-center bg-neutral-900 border ${dangerBorderColor} rounded-lg p-2`}
+              >
                 {errors.inputText.type === "maxLength" &&
                   "Voice note too large Transcribed text should be at most 100 words"}
                 {errors.inputText.type === "required" &&
@@ -373,7 +451,7 @@ export default function SearchByVoice() {
           >
             <FiTrash className="size-3" />
             {/* This is the vertical line connecting delete and play button */}
-            <div className="absolute left-2.5 bottom-4 -z-10 text-neutral-600">
+            <div className="absolute left-2.5 bottom-4 -z-10 text-neutral-700">
               |
             </div>
           </button>
