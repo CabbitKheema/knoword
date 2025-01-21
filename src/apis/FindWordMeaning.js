@@ -1,7 +1,7 @@
 import Groq from "groq-sdk";
 import { requestStatus } from "../enums/enums";
 
-export async function FindWordMeaning(inputText) {
+export function FindWordMeaning(inputText) {
   return new Promise((resolve, reject) => {
     const groq = new Groq({
       apiKey: import.meta.env.VITE_GROQ_API_KEY,
@@ -36,7 +36,7 @@ export async function FindWordMeaning(inputText) {
         resolve(response);
       })
       .catch((error) => {
-        console.error("Error fetching word meaning:", error);
+        // console.error("Error fetching word meaning:", error);
         const response = {
           status: requestStatus.FAILURE,
           message: [
