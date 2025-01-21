@@ -12,8 +12,8 @@ createRoot(document.getElementById("root")).render(
     <Provider store={store}>
       <ToastProvider>
         <App />
+        <PWAUpdatePrompt />
       </ToastProvider>
-      <PWAUpdatePrompt />
     </Provider>
   </StrictMode>
 );

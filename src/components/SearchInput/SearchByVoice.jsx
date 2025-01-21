@@ -63,6 +63,20 @@ export default function SearchByVoice() {
     recordingTime,
   } = useAudioRecorder();
 
+  const [isMicrophoneAvailable, setIsMicrophoneAvailable] = useState(false);
+
+  useEffect(() => {
+    // Check if the microphone is available
+    navigator.mediaDevices
+      .getUserMedia({ audio: true })
+      .then(() => {
+        setIsMicrophoneAvailable(true); // Microphone is available
+      })
+      .catch(() => {
+        setIsMicrophoneAvailable(false); // Microphone is unavailable or access is denied
+      });
+  }, []);
+
   const maxAudioDuration = parseFloat(
     import.meta.env.VITE_MAX_AUDIO_DURATION_IN_SECONDS
   );
@@ -330,9 +344,23 @@ export default function SearchByVoice() {
 
       <button
         type="button"
-        onClick={() =>
-          isRecording ? stopRecording() : (reset(), startRecording())
-        }
+        onClick={() => {
+          if (isRecording) {
+            stopRecording();
+          } else {
+            if (!isMicrophoneAvailable) {
+              toast.notificationToast({
+                message: [
+                  "Microphone not found!",
+                  "Microphone is unavailable or access is denied",
+                ],
+              });
+            } else {
+              reset();
+              startRecording();
+            }
+          }
+        }}
         className={`${interactablePadding} ${leftInteractableEdgeStyle} ${
           isPlaying || isSubmitting || isTranscribing
             ? hoverOrDisabledInteractableBG

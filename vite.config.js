@@ -10,7 +10,7 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      // registerType: "prompt", // Ensures the app auto-checks for updates
+      registerType: "prompt", // Ensures the app auto-checks for updates
       // devOptions: {
       //   enabled: true, // Enables PWA during development
       // },
