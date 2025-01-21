@@ -27,7 +27,7 @@ export function FindWordMeaning(inputText) {
       })
       .then((chatCompletion) => {
         const output = chatCompletion.choices[0].message.content;
-        // console.log(output);
+        console.log(output);
         const response = {
           status: requestStatus.SUCCESS,
           message: ["Searching successful!", "Found the meaning of given word"],
