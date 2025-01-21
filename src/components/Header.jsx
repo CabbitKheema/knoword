@@ -2,6 +2,7 @@ import { BiMenu, BiX } from "react-icons/bi";
 import { useState } from "react";
 import { BiBook } from "react-icons/bi";
 import { navItems } from "../constants";
+import ApiTestReport from "./Report/ApiTestReport";
 
 export default function Header() {
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
@@ -30,12 +31,7 @@ export default function Header() {
             <a href="/sign-in" className="py-2 px-3 border rounded-md">
               Sign In
             </a>
-            <a
-              href="#"
-              className="bg-gradient-to-r from-orange-500 to-orange-800 py-2 px-3 rounded-md"
-            >
-              Create an account
-            </a>
+            <ApiTestReport />
           </div>
           <div className="lg:hidden md:flex">
             <button onClick={toggleNavbar}>
@@ -56,12 +52,7 @@ export default function Header() {
               <a href="/sign-in" className="py-2 px-3 border rounded-md">
                 Sign In
               </a>
-              <a
-                href="#"
-                className="py-2 px-3 rounded-md bg-gradient-to-r from-orange-500 to-orange-800"
-              >
-                Create an account
-              </a>
+              <ApiTestReport />
             </div>
           </div>
         )}

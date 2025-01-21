@@ -1,12 +1,7 @@
-import {
-  borderColor,
-  idleInteractableBG,
-  roundedInteractableEdgeStyle,
-} from "../../constants";
 import { useToast } from "../Toast/ToastService";
 import { FcAcceptDatabase } from "react-icons/fc";
 
-export default function BackendApiReport() {
+export default function ApiTestReport() {
   const toast = useToast();
 
   const fetchBackendApiReport = async () => {
@@ -49,13 +44,12 @@ export default function BackendApiReport() {
   };
   return (
     <button
-      className={`fixed bottom-24 left-4 flex items-center ${roundedInteractableEdgeStyle} ${borderColor} ${idleInteractableBG} `}
+      className="flex items-center w-36 h-10 rounded-md bg-gradient-to-r from-orange-500 to-orange-800 text-white shadow hover:from-orange-600 hover:to-orange-900 focus:outline-none "
       onClick={fetchBackendApiReport}
+      aria-label="Fetch API report"
     >
-      <span className={`px-2 py-0.5 shrink-0 border-r ${borderColor}  `}>
-        <FcAcceptDatabase className="" />
-      </span>
-      <span className={`px-2 py-2 text-xs truncate`}>Backend api report</span>
+      <FcAcceptDatabase className="w-10 h-5 px-2 border-r" />
+      <p className="text-sm mx-auto font-medium">API Report</p>
     </button>
   );
 }
