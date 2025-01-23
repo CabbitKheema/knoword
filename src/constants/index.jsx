@@ -36,7 +36,8 @@ export const borderColor = " border-neutral-700/80 ";
 export const dangerBorderColor = " border-red-500 ";
 export const interactablePadding = " px-4 py-2.5 ";
 export const hoverOrDisabledInteractableBG = " bg-neutral-900 ";
-export const idleInteractableBG = " bg-neutral-800 hover:bg-neutral-900 ";
+export const idleInteractableBG =
+  " bg-neutral-800 hover:bg-neutral-900 active:bg-neutral-800";
 export const leftInteractableEdgeStyle = " rounded-l-lg border ";
 export const middleInteractableEdgeStyle = " border border-l-0 ";
 export const rightInteractableEdgeStyle = " rounded-r-lg border border-l-0 ";
