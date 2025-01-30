@@ -17,7 +17,7 @@ export default function Header() {
         <div className="flex justify-between items-center">
           <a className="flex items-center flex-shrink-0" href="/">
             <img
-              src="public\pwa-192x192.png"
+              src="\pwa-192x192.png"
               className="h-10 w-10 mr-2"
               alt="BiBook"
             />
