@@ -4,8 +4,8 @@ export default function Footer() {
       <div className="mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between text-neutral-500">
         <span className="text-sm  sm:text-center truncate">
           © {new Date().getFullYear()}{" "}
-          <a href="#" className="hover:underline">
-            ReadAssist™
+          <a href="/" className="hover:underline">
+            knoWord™
           </a>
           . All Rights Reserved.
         </span>

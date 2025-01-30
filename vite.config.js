@@ -21,10 +21,10 @@ export default defineConfig({
       },
       includeAssets: ["**/*"],
       manifest: {
-        name: "My Awesome App",
-        short_name: "MyApp",
-        description: "My Awesome App description",
-        theme_color: "#ffffff",
+        name: "knoWord",
+        short_name: "knoWord",
+        description:
+          "This is a progressive web app to help book readers find meaning of unfamiliar words in the books they read quickly and effortlessly.",
         icons: [
           {
             src: "/pwa-192x192.png",

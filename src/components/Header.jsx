@@ -1,6 +1,5 @@
 import { BiMenu, BiX } from "react-icons/bi";
 import { useState } from "react";
-import { BiBook } from "react-icons/bi";
 import { navItems } from "../constants";
 import ApiTestReport from "./Report/ApiTestReport";
 
@@ -16,10 +15,14 @@ export default function Header() {
     <nav className="w-full z-50 py-3 border-b border-neutral-700/80">
       <div className="container px-8 mx-auto  lg:text-sm">
         <div className="flex justify-between items-center">
-          <div className="flex items-center flex-shrink-0">
-            <BiBook className="h-10 w-10 mr-2" alt="BiBook" />
-            <span className="text-xl tracking-tight">ReadAssist</span>
-          </div>
+          <a className="flex items-center flex-shrink-0" href="/">
+            <img
+              src="public\pwa-192x192.png"
+              className="h-10 w-10 mr-2"
+              alt="BiBook"
+            />
+            <span className="text-xl tracking-tight">knoWord</span>
+          </a>
           <ul className="hidden lg:flex ml-14 space-x-12">
             {navItems.map((item, index) => (
               <li key={index}>
