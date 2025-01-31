@@ -18,6 +18,10 @@ import {
 } from "../../constants";
 import { useToast } from "../Toast/ToastService";
 import { useForm } from "react-hook-form";
+import {
+  generateFailureToastMessage,
+  generateSuccessToastMessage,
+} from "../Toast/generateToastMessage";
 
 export default function SearchByText() {
   const dispatch = useDispatch();
@@ -49,18 +53,21 @@ export default function SearchByText() {
 
       if (data.success === false) {
         console.error("Error fetching word meaning:", data.error);
-        toast.notificationToast(data);
+        toast.notificationToast(generateFailureToastMessage(data.message));
       } else if (res.ok) {
         dispatch(setTextResult(data.data));
-        toast.notificationToast(data);
+        toast.notificationToast(generateSuccessToastMessage(data.message));
         reset();
       } else if (res.status == 400) {
-        toast.notificationToast(data);
+        toast.notificationToast(generateFailureToastMessage(data.message));
       }
     } catch (error) {
-      toast.notificationToast({
-        message: ["Error!", error.message || "Something went wrong."],
-      });
+      toast.notificationToast(
+        generateFailureToastMessage([
+          "Error!",
+          error.message || "Something went wrong.",
+        ])
+      );
     }
   };
 

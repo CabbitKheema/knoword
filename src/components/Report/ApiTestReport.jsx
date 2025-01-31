@@ -1,3 +1,7 @@
+import {
+  generateFailureToastMessage,
+  generateSuccessToastMessage,
+} from "../Toast/generateToastMessage";
 import { useToast } from "../Toast/ToastService";
 import { FcAcceptDatabase } from "react-icons/fc";
 
@@ -17,29 +21,35 @@ export default function ApiTestReport() {
       if (!res.ok) {
         if (contentType && contentType.includes("application/json")) {
           const data = await res.json();
-          toast.notificationToast(data);
+          toast.notificationToast(generateFailureToastMessage(data.message));
           console.error("Error response:", data);
         } else {
-          toast.notificationToast({
-            message: ["Error!", "An unexpected error occurred."],
-          });
+          toast.notificationToast(
+            generateFailureToastMessage([
+              "Error!",
+              "An unexpected error occurred.",
+            ])
+          );
         }
       } else if (contentType && contentType.includes("text/html")) {
         // Handle the HTML content (e.g., display or render it)
-        toast.notificationToast({
-          message: ["Success!", "HTML file fetched successfully."],
-        });
+        toast.notificationToast(
+          generateSuccessToastMessage([
+            "Success!",
+            "HTML file fetched successfully.",
+          ])
+        );
         // Open a new tab with the specified URL
         window.open(backendApiReportURL, "_blank");
       }
     } catch (error) {
       console.error("An error occurred:", error); // Log the error for debugging purposes
-      toast.notificationToast({
-        message: [
+      toast.notificationToast(
+        generateFailureToastMessage([
           "Error!",
           error.message || "An unexpected error occurred. Please try again.",
-        ],
-      });
+        ])
+      );
     }
   };
   return (

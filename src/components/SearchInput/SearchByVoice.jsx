@@ -31,6 +31,10 @@ import {
 import { useAudioRecorder } from "react-audio-voice-recorder";
 import { useToast } from "../Toast/ToastService";
 import { useForm } from "react-hook-form";
+import {
+  generateFailureToastMessage,
+  generateSuccessToastMessage,
+} from "../Toast/generateToastMessage";
 // import { VoiceNoteToText } from "../../apis/VoiceNoteToText";
 
 export default function SearchByVoice() {
@@ -85,12 +89,12 @@ export default function SearchByVoice() {
   useEffect(() => {
     if (recordingTime >= maxAudioDuration) {
       stopRecording();
-      toast.notificationToast({
-        message: [
+      toast.notificationToast(
+        generateFailureToastMessage([
           "Limit reached!",
           `Audio duration should not exceed the allowed limit of ${maxAudioDuration} seconds`,
-        ],
-      });
+        ])
+      );
     }
   }, [recordingTime]);
 
@@ -117,12 +121,12 @@ export default function SearchByVoice() {
           });
         });
     } catch (error) {
-      toast.notificationToast({
-        message: [
+      toast.notificationToast(
+        generateFailureToastMessage([
           "Error!",
           error.message || "Failed to determine audio duration",
-        ],
-      });
+        ])
+      );
     }
   }, [recordingBlob]);
   // const startRecording = async () => {
@@ -217,25 +221,28 @@ export default function SearchByVoice() {
         if (res.status === 400) {
           // Handle bad request specifically
           console.warn("Bad request:", data.error);
-          toast.notificationToast(data);
+          toast.notificationToast(generateFailureToastMessage(data.message));
         } else {
           // Handle general HTTP errors
           console.error("Error from server:", res.statusText);
-          toast.notificationToast(data);
+          toast.notificationToast(generateFailureToastMessage(data.message));
         }
       } else if (data.success === false) {
         // Handle API-level failure
         console.error("Error recognizing voice:", data.error);
-        toast.notificationToast(data);
+        toast.notificationToast(generateFailureToastMessage(data.message));
       } else {
         // Handle success
         setValue("inputText", data.data);
-        toast.notificationToast(data);
+        toast.notificationToast(generateSuccessToastMessage(data.message));
       }
     } catch (error) {
-      toast.notificationToast({
-        message: ["Error!", error.message || "Something went wrong."],
-      });
+      toast.notificationToast(
+        generateFailureToastMessage([
+          "Error!",
+          error.message || "Something went wrong.",
+        ])
+      );
     } finally {
       dispatch(setWebsiteAction(websiteAction.IDLE));
     }
@@ -267,18 +274,21 @@ export default function SearchByVoice() {
 
       if (data.success === false) {
         console.error("Error fetching word meaning:", data.error);
-        toast.notificationToast(data);
+        toast.notificationToast(generateFailureToastMessage(data.message));
       } else if (res.ok) {
         dispatch(setTextResult(data.data));
-        toast.notificationToast(data);
+        toast.notificationToast(generateSuccessToastMessage(data.message));
         cancelRecordedAudio();
       } else if (res.status == 400) {
-        toast.notificationToast(data);
+        toast.notificationToast(generateFailureToastMessage(data.message));
       }
     } catch (error) {
-      toast.notificationToast({
-        message: ["Error!", error.message || "Something went wrong."],
-      });
+      toast.notificationToast(
+        generateFailureToastMessage([
+          "Error!",
+          error.message || "Something went wrong.",
+        ])
+      );
     }
   };
 
@@ -349,12 +359,12 @@ export default function SearchByVoice() {
             stopRecording();
           } else {
             if (!isMicrophoneAvailable) {
-              toast.notificationToast({
-                message: [
+              toast.notificationToast(
+                generateFailureToastMessage([
                   "Microphone not found!",
                   "Microphone is unavailable or access is denied",
-                ],
-              });
+                ])
+              );
             } else {
               reset();
               startRecording();

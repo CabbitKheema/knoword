@@ -27,7 +27,7 @@ export default function ToastProvider({ children }) {
     const id = Date.now();
     open(
       <div
-        className={`${borderColor} ${hoverOrDisabledInteractableBG} ${roundedInteractableEdgeStyle} flex gap-2 p-4 `}
+        className={`${response.borderColor} ${hoverOrDisabledInteractableBG} ${roundedInteractableEdgeStyle} flex gap-2 p-4 `}
       >
         <div>
           <h3 className="font-bold">{response.message[0]}</h3>
@@ -41,7 +41,7 @@ export default function ToastProvider({ children }) {
     const id = Date.now();
     open(
       <div
-        className={`${borderColor} ${hoverOrDisabledInteractableBG} ${roundedInteractableEdgeStyle} flex gap-2 p-4 `}
+        className={`${response.borderColor} ${hoverOrDisabledInteractableBG} ${roundedInteractableEdgeStyle} flex gap-2 p-4 `}
       >
         <div>
           <h3 className="font-bold">{response.message[0]}</h3>

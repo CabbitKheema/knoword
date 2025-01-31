@@ -40,6 +40,8 @@ const isTouchDevice =
 }
 export const borderColor = " border-neutral-700/80 ";
 export const dangerBorderColor = " border-red-500 ";
+export const safeBorderColor = " border-green-500 ";
+export const promptBorderColor = " border-blue-500 ";
 export const interactablePadding = " px-4 py-2.5 ";
 export const hoverOrDisabledInteractableBG = " bg-neutral-900 ";
 export const idleInteractableBG = `bg-neutral-800 transition-colors duration-200 ${
@@ -72,3 +74,12 @@ export const idleDisabledText = " text-neutral-400 bg-neutral-900 ";
 {
   /*css end*/
 }
+
+{
+  /* css enums  */
+}
+export const EBorderColorByStatus = Object.freeze({
+  PASS: safeBorderColor,
+  FAIL: dangerBorderColor,
+  PROMPT: promptBorderColor,
+});
