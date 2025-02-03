@@ -19,7 +19,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/CabbitKheema/knoword">
-    <img src="/logo.png" alt="Logo" width="80" height="80">
+    <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">knoword</h3>
@@ -390,7 +390,7 @@ Project Link: [https://github.com/CabbitKheema/knoword](https://github.com/Cabbi
 [license-url]: https://github.com/CabbitKheema/knoword/blob/master/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/mr-prajwal-k
-[product-screenshot]: /screenshot.png
+[product-screenshot]: images/screenshot.png
 [Node.js]: https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white
 [Node-url]: https://nodejs.org/
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
