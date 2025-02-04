@@ -27,7 +27,7 @@
   <p align="center">
     A React SWC PWA on Vite, supported by <a href="https://github.com/CabbitKheema/knoword-backend"><strong>knoword-backend</strong></a> helping book readers quickly find meanings of unfamiliar words.
     <br />
-    <a href="https://docs.google.com/document/d/1AWgcsuLVrC9QK1Y_xz1gr3drXJHQOMM1_HnaLJiHE3U/edit?tab=t.0"><strong>Explore the docs »</strong></a>
+    <a href="https://docs.google.com/document/d/1AWgcsuLVrC9QK1Y_xz1gr3drXJHQOMM1_HnaLJiHE3U/edit?usp=sharing"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="https://ck-knoword.netlify.app/">View Demo</a>
@@ -372,7 +372,7 @@ Project Link: [https://github.com/CabbitKheema/knoword](https://github.com/Cabbi
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [knoword-demo-url]: https://ck-knoword.netlify.app/
-[knoword-documentation-url]: https://docs.google.com/document/d/1AWgcsuLVrC9QK1Y_xz1gr3drXJHQOMM1_HnaLJiHE3U/edit?tab=t.0
+[knoword-documentation-url]: https://docs.google.com/document/d/1AWgcsuLVrC9QK1Y_xz1gr3drXJHQOMM1_HnaLJiHE3U/edit?usp=sharing
 [knoword-tests-collection-url]: https://www.postman.com/science-physicist-1938228/workspace/knoword/collection/41172600-bc0af1e9-b249-4415-af88-5dfbc6efb759?action=share&creator=41172600&active-environment=41172600-d7a3beb2-5d06-448b-b351-9d68620b0e50
 [fork-knoword-tests-collection-url]: https://app.getpostman.com/run-collection/41172600-bc0af1e9-b249-4415-af88-5dfbc6efb759?action=collection%2Ffork&source=rip_markdown&collection-url=entityId%3D41172600-bc0af1e9-b249-4415-af88-5dfbc6efb759%26entityType%3Dcollection%26workspaceId%3D83711707-5270-464c-8e5e-00a5e3fd2209#?env%5BknoWord_backend_local%5D=W3sia2V5IjoiQkFDS0VORF9VUkwiLCJ2YWx1ZSI6Imh0dHA6Ly9sb2NhbGhvc3Q6MzAwMCIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJkZWZhdWx0Iiwic2Vzc2lvblZhbHVlIjoiaHR0cDovL2xvY2FsaG9zdDozMDAwIiwiY29tcGxldGVTZXNzaW9uVmFsdWUiOiJodHRwOi8vbG9jYWxob3N0OjMwMDAiLCJzZXNzaW9uSW5kZXgiOjB9XQ==
 [knoword-tests-documentation-url]: https://www.postman.com/science-physicist-1938228/knoword/documentation/08isa39/knoword-tests
