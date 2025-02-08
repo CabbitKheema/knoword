@@ -6,7 +6,7 @@ import {
 } from "./Toast/generateToastMessage";
 import { PiGlobe, PiGlobeX } from "react-icons/pi";
 
-const NetworkStatus = () => {
+export default function NetworkStatus() {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const toast = useToast();
 
@@ -43,14 +43,12 @@ const NetworkStatus = () => {
   }, [toast]);
 
   return (
-    <div className="absolute top-16 left-0 ">
+    <div className="w-10 h-10 ml-2 flex justify-center items-center [&>*]:w-full [&>*]:h-full">
       {isOnline ? (
-        <PiGlobe className="w-10 h-10 text-green-900" />
+        <PiGlobe className="text-green-900" />
       ) : (
-        <PiGlobeX className="w-10 h-10 text-red-900" />
+        <PiGlobeX className="text-red-900" />
       )}
     </div>
   );
-};
-
-export default NetworkStatus;
+}

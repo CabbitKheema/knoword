@@ -2,6 +2,7 @@ import { BiMenu, BiX } from "react-icons/bi";
 import { useState } from "react";
 import { navItems } from "../constants";
 import ApiTestReport from "./Report/ApiTestReport";
+import NetworkStatus from "./NetworkStatus";
 
 export default function Header() {
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
@@ -22,6 +23,7 @@ export default function Header() {
               alt="BiBook"
             />
             <span className="text-xl tracking-tight">knoWord</span>
+            <NetworkStatus />
           </a>
           <ul className="hidden lg:flex ml-14 space-x-12">
             {navItems.map((item, index) => (
