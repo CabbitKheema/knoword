@@ -8,3 +8,8 @@
   font-family: "Poppins", sans-serif;
   color-scheme: dark;
 }
+
+.markdown-body, [data-theme="dark"] {
+  --bgColor-default: "#171717";
+  --bgColor-muted: #262626;
+}

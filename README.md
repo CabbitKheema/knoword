@@ -8,12 +8,16 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![project_license][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
+<div class="flex flex-wrap gap-2">
+  <a href="https://github.com/CabbitKheema/knoword/graphs/contributors"><img src="https://img.shields.io/github/contributors/CabbitKheema/knoword.svg?style=for-the-badge" alt="Contributors" /></a>
+  <a href="https://github.com/CabbitKheema/knoword/network/members"><img src="https://img.shields.io/github/forks/CabbitKheema/knoword.svg?style=for-the-badge" alt="Forks" /></a>
+  <a href="https://github.com/CabbitKheema/knoword/stargazers"><img src="https://img.shields.io/github/stars/CabbitKheema/knoword.svg?style=for-the-badge" alt="Stars" /></a>
+  <a href="https://github.com/CabbitKheema/knoword/issues"><img src="https://img.shields.io/github/issues/CabbitKheema/knoword.svg?style=for-the-badge" alt="Issues" /></a>
+  <a href="https://github.com/CabbitKheema/knoword/blob/master/LICENSE"><img src="https://img.shields.io/github/license/CabbitKheema/knoword.svg?style=for-the-badge" alt="License" /></a>
+  <a href="https://linkedin.com/in/mr-prajwal-k"><img src="https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555" alt="LinkedIn" /></a>
+</div>
+
+
 
 <!-- PROJECT LOGO -->
 <br />
@@ -105,19 +109,19 @@ To get a local copy up and running, follow these simple steps.
 1. Download and install nvm by checking this [github-repo](https://github.com/nvm-sh/nvm)
 2. In order to download nvm for windows, click [here](https://github.com/nvm-sh/nvm?tab=readme-ov-file#important-notes)
 3. Verify you have this command available in your shell and that the found version look similar to the below output:
-   ```sh
+   ```bash
    nvm -v
    
    1.2.2
    ```
 4. Install the latest stable release of Node.js
-   ```sh
+   ```bash
    nvm install node
    ```
    > NPM is included with Node.js installation.
 
 5. Update npm (if necessary)
-   ```sh
+   ```bash
    npm install npm@latest -g
    ```
 
@@ -126,12 +130,12 @@ To get a local copy up and running, follow these simple steps.
 ### Installation 🌱 <a id="installation"></a>
 
 1. Clone the repo
-   ```sh
+   ```bash
    git clone https://github.com/CabbitKheema/knoword.git
    ```
 
 2. Install NPM packages
-   ```sh
+   ```bash
    npm install
    ```
 
@@ -152,7 +156,7 @@ To get a local copy up and running, follow these simple steps.
 
 * Start the client
 
-   ```
+   ```bash
    npm run dev
 
    > knoword@0.0.0 dev
@@ -166,7 +170,7 @@ To get a local copy up and running, follow these simple steps.
    ➜  press h + enter to show help
    ```
    > Since PWA works only on https, in order to test PWA's features such as the offline mode and service worker update triggers, run the following command
-   > ```
+   > ```bash
    > npm run serve
    > ```
    > This builds the project and hosts it using [https-localhost](https://github.com/daquinoaldo/https-localhost)
@@ -366,6 +370,15 @@ Project Link: [https://github.com/CabbitKheema/knoword](https://github.com/Cabbi
 * [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
 * [Img Shields](https://shields.io)
 * [GitHub Pages](https://pages.github.com)
+* [@wooorm/starry-night | npm package](https://www.npmjs.com/package/@wooorm/starry-night)
+* [github-markdown-css | npm package](https://www.npmjs.com/package/github-markdown-css)
+* [rehype-slug | npm package](https://www.npmjs.com/package/rehype-slug)
+* [rehype-starry-night | npm package](https://www.npmjs.com/package/rehype-starry-night)
+* [remark-toc | npm package](https://www.npmjs.com/package/remark-toc)
+* [react-markdown | npm package](https://www.npmjs.com/package/react-markdown)
+* [rehype-raw | npm package](https://www.npmjs.com/package/rehype-raw)
+* [remark-gfm | npm package](https://www.npmjs.com/package/remark-gfm)
+* [GitHub Flavored Markdown Spec](https://github.github.com/gfm/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

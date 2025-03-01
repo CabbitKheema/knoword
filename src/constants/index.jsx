@@ -1,8 +1,6 @@
 export const navItems = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
-  { label: "SignIn", href: "/sign-in" },
-  { label: "SignUp", href: "/sign-up" },
 ];
 
 export const resourcesLinks = [

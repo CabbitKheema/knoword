@@ -5,9 +5,14 @@ export default function Footer() {
         <span className="text-sm  sm:text-center truncate">
           © {new Date().getFullYear()}{" "}
           <a href="/" className="hover:underline">
-            knoWord™
+            knoWord.
           </a>
-          . All Rights Reserved.
+          <a
+            href="https://opensource.org/license/mit"
+            className="hover:underline"
+          >
+            &nbsp;The MIT License
+          </a>
         </span>
         <ul className="hidden md:flex flex-wrap items-center text-sm mt-0 font-medium text-neutral-500 ">
           <li>
@@ -16,18 +21,11 @@ export default function Footer() {
             </a>
           </li>
           <li>
-            <a href="#" className="hover:underline me-4 md:me-6">
-              Privacy Policy
-            </a>
-          </li>
-          <li>
-            <a href="#" className="hover:underline me-4 md:me-6">
-              Licensing
-            </a>
-          </li>
-          <li>
-            <a href="#" className="hover:underline">
-              Contact
+            <a
+              href="https://github.com/CabbitKheema/knoword"
+              className="hover:underline me-4 md:me-6"
+            >
+              GitHub
             </a>
           </li>
         </ul>

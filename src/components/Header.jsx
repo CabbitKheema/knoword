@@ -1,4 +1,5 @@
 import { BiMenu, BiX } from "react-icons/bi";
+import { FiSettings } from "react-icons/fi";
 import { useState } from "react";
 import { navItems } from "../constants";
 import ApiTestReport from "./Report/ApiTestReport";
@@ -33,8 +34,8 @@ export default function Header() {
             ))}
           </ul>
           <div className="hidden lg:flex  space-x-12 items-center">
-            <a href="/sign-in" className="py-2 px-3 border rounded-md">
-              Sign In
+            <a href="/settings" className="py-2 px-3 border rounded-md">
+              <FiSettings className="size-5" />
             </a>
             <ApiTestReport />
           </div>
@@ -54,8 +55,8 @@ export default function Header() {
               ))}
             </ul>
             <div className="flex space-x-6">
-              <a href="/sign-in" className="py-2 px-3 border rounded-md">
-                Sign In
+              <a href="/settings" className="py-2 px-3 border rounded-md">
+                <FiSettings className="size-5" />
               </a>
               <ApiTestReport />
             </div>
